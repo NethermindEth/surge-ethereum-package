@@ -300,6 +300,21 @@ SUBCATEGORY_PARAMS = {
         "mev",
         "other",
     ],
+    "protocol_params": [
+        "image",
+        "log_level",
+        "block_gas_limit",
+        "owner_params",
+        "dao",
+        "l2_params",
+        "liveness_params",
+        "preconf_params",
+    ],
+    "prover_params": [
+        "sgx_params",
+        "risc0_params",
+        "sp1_params", 
+    ],
 }
 
 ADDITIONAL_SERVICES_PARAMS = [
@@ -321,6 +336,8 @@ ADDITIONAL_SERVICES_PARAMS = [
     "apache",
     "tracoor",
     "spamoor",
+    "surge",
+    "surge_stack",
 ]
 
 ADDITIONAL_CATEGORY_PARAMS = {

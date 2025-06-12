@@ -56,6 +56,8 @@ get_prefunded_accounts = import_module(
     "./src/prefunded_accounts/get_prefunded_accounts.star"
 )
 spamoor = import_module("./src/spamoor/spamoor.star")
+surge_l1 = import_module("./src/surge_protocols/deploy_surge_l1.star")
+surge_l2 = import_module("./src/surge_protocols/setup_surge_l2.star")
 
 GRAFANA_USER = "admin"
 GRAFANA_PASSWORD = "admin"
@@ -88,6 +90,8 @@ def run(plan, args={}):
     keymanager_enabled = args_with_right_defaults.keymanager_enabled
     apache_port = args_with_right_defaults.apache_port
     docker_cache_params = args_with_right_defaults.docker_cache_params
+    protocol_params = args_with_right_defaults.protocol_params
+    prover_params = args_with_right_defaults.prover_params
 
     prefunded_accounts = genesis_constants.PRE_FUNDED_ACCOUNTS
     if (
@@ -723,6 +727,33 @@ def run(plan, args={}):
                 index,
                 osaka_time,
             )
+        elif additional_service == "surge":
+            plan.print("Launching surge")
+
+            surge_l1_deployment_result = surge_l1.deploy(
+                plan,
+                prefunded_accounts,
+                fuzz_target,
+                protocol_params,
+                prover_params,
+            )
+
+            plan.print("Successfully deployed surge L1")
+        elif (additional_service == "surge_stack" and surge_l1_deployment_result != None):
+            plan.print("Launching surge stack")
+            # surge_stack_details = surge_stack.launch_surge_stack(
+            # )
+
+            # surge_l2.setup(
+            #     plan,
+            #     network_id,
+            #     prefunded_accounts,
+            #     protocol_params,
+            #     surge_l1_deployment_result,
+            #     surge_stack_details.rpc_url,
+            # )
+
+            plan.print("Successfully started surge stack")
         else:
             fail("Invalid additional service %s" % (additional_service))
     if launch_prometheus_grafana:

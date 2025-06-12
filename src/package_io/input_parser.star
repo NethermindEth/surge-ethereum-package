@@ -81,6 +81,8 @@ ATTR_TO_BE_SKIPPED_AT_ROOT = (
     "xatu_sentry_params",
     "port_publisher",
     "spamoor_params",
+    "protocol_params",
+    "prover_params",
 )
 
 
@@ -114,6 +116,8 @@ def input_parser(plan, input_args):
     result["global_node_selectors"] = {}
     result["port_publisher"] = get_port_publisher_params("default")
     result["spamoor_params"] = get_default_spamoor_params()
+    result["protocol_params"] = {}
+    result["prover_params"] = {}
 
     if constants.NETWORK_NAME.shadowfork in result["network_params"]["network"]:
         shadow_base = result["network_params"]["network"].split("-shadowfork")[0]
@@ -183,6 +187,14 @@ def input_parser(plan, input_args):
             for sub_attr in input_args["ethereum_genesis_generator_params"]:
                 sub_value = input_args["ethereum_genesis_generator_params"][sub_attr]
                 result["ethereum_genesis_generator_params"][sub_attr] = sub_value
+        elif attr == "protocol_params":
+            for sub_attr in input_args["protocol_params"]:
+                sub_value = input_args["protocol_params"][sub_attr]
+                result["protocol_params"][sub_attr] = sub_value
+        elif attr == "prover_params":
+            for sub_attr in input_args["prover_params"]:
+                sub_value = input_args["prover_params"][sub_attr]
+                result["prover_params"][sub_attr] = sub_value
 
     if result.get("disable_peer_scoring"):
         result = enrich_disable_peer_scoring(result)
@@ -588,6 +600,35 @@ def input_parser(plan, input_args):
             other_public_port_start=result["port_publisher"]["other"][
                 "public_port_start"
             ],
+        ),
+        protocol_params=struct(
+            image=result["protocol_params"]["image"],
+            protocol_log_level=result["protocol_params"]["log_level"],
+            protocol_block_gas_limit=result["protocol_params"]["block_gas_limit"],
+            owner_multisig=result["protocol_params"]["owner_params"]["multisig"],
+            owner_multisig_signers=result["protocol_params"]["owner_params"]["multisig_signers"],
+            timelock_period=result["protocol_params"]["owner_params"]["timelock_period"],
+            dao=result["protocol_params"]["dao"],
+            l2_chain_id=result["protocol_params"]["l2_params"]["chain_id"],
+            l2_genesis_hash=result["protocol_params"]["l2_params"]["genesis_hash"],
+            liveness_max_verification_delay=result["protocol_params"]["liveness_params"]["max_verification_delay"],
+            liveness_min_verification_streak=result["protocol_params"]["liveness_params"]["min_verification_streak"],
+            liveness_bond_base=result["protocol_params"]["liveness_params"]["liveness_bond_base"],
+            liveness_bond_per_block=result["protocol_params"]["liveness_params"]["liveness_bond_per_block"],
+            preconf_inclusion_window=result["protocol_params"]["preconf_params"]["inclusion_window"],
+            preconf_inclusion_fee_in_gwei=result["protocol_params"]["preconf_params"]["inclusion_fee_in_gwei"],
+            preconf_fallback_preconf=result["protocol_params"]["preconf_params"]["fallback_preconf"],
+        ),
+        prover_params=struct(
+            mr_enclave=result["prover_params"]["sgx_params"]["mr_enclave"],
+            mr_signer=result["prover_params"]["sgx_params"]["mr_signer"],
+            qeid_path=result["prover_params"]["sgx_params"]["qeid_path"],
+            tcb_info_path=result["prover_params"]["sgx_params"]["tcb_info_path"],
+            v3_quote_bytes=result["prover_params"]["sgx_params"]["v3_quote_bytes"],
+            block_proving_image_id=result["prover_params"]["risc0_params"]["block_proving_image_id"],
+            aggregation_image_id=result["prover_params"]["risc0_params"]["aggregation_image_id"],
+            block_proving_program_vkey=result["prover_params"]["sp1_params"]["block_proving_program_vkey"],
+            aggregation_program_vkey=result["prover_params"]["sp1_params"]["aggregation_program_vkey"],
         ),
     )
 

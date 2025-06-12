@@ -1,7 +1,7 @@
 participants:
 # EL
-  - el_type: geth
-    el_image: ethereum/client-go:latest
+  - el_type: nethermind
+    el_image: nethermind/nethermind:latest
     el_log_level: ""
     el_extra_env_vars: {}
     el_extra_labels: {}
@@ -98,7 +98,7 @@ network_params:
   base_fee_update_fraction_electra: 5007716
   additional_preloaded_contracts: {}
   devnet_repo: ethpandaops
-  prefunded_accounts: {}
+  prefunded_accounts: '{"0x3bc256069FF9af461F3e04494A3ece3f62F183fC": {"balance": "10000ETH"}}'
   bpo_1_epoch: 18446744073709551615
   bpo_1_max_blobs: 12
   bpo_1_target_blobs: 9
@@ -124,7 +124,12 @@ network_params:
   validator_balance: 32
   min_epochs_for_data_column_sidecars_requests: 4096
 
-additional_services: []
+additional_services:
+  - tx_fuzz
+  - surge
+  - surge_stack
+  # - blockscout
+  # - blobscan
 dora_params:
   image: ""
 tx_fuzz_params:
@@ -208,14 +213,14 @@ keymanager_enabled: false
 checkpoint_sync_enabled: false
 checkpoint_sync_url: ""
 ethereum_genesis_generator_params:
-  image: ethpandaops/ethereum-genesis-generator:4.1.11
+  image: nethsurge/ethereum-genesis-generator:pacaya
 port_publisher:
   nat_exit_ip: KURTOSIS_IP_ADDR_PLACEHOLDER
   el:
-    enabled: false
+    enabled: true
     public_port_start: 32000
   cl:
-    enabled: false
+    enabled: true
     public_port_start: 33000
   vc:
     enabled: false
@@ -224,8 +229,43 @@ port_publisher:
     enabled: false
     public_port_start: 35000
   additional_services:
-    enabled: false
+    enabled: true
     public_port_start: 36000
   mev:
     enabled: false
     public_port_start: 37000
+protocol_params:
+  image: nethermind.jfrog.io/modular-oci-local-dev/taiko-protocol:sha-312a3cc
+  log_level: "-vv"
+  block_gas_limit: "200000000"
+  owner_params:
+    multisig: 0x60997970C51812dc3A010C7d01b50e0d17dc79C8
+    multisig_signers: "0x7633740000000000000000000000000000000002,0x7633740000000000000000000000000000000003,0x7633740000000000000000000000000000000004"
+    timelock_period: "86400"
+  dao: 0x7633740000000000000000000000000000000001
+  l2_params:
+    chain_id: "763374"
+    genesis_hash: 0x2311ef645ca93e590379cb493c088196938daf8568c05512c3159bcc97af0883
+  liveness_params:
+    max_verification_delay: "100"
+    min_verification_streak: "10"
+    liveness_bond_base: "100000000000000000"
+    liveness_bond_per_block: "100000000000000000"
+  preconf_params:
+    inclusion_window: "24"
+    inclusion_fee_in_gwei: "100"
+    fallback_preconf: 0x7633740000000000000000000000000000000001
+prover_params:
+  sgx_params:
+    mr_enclave: 0x0000010000000000000000000000000000000000000000000000000000000000
+    mr_signer: 0x0000010000000000000000000000000000000000000000000000000000000000
+    qeid_path: "/test/layer1/automata-attestation/assets/0923/identity.json"
+    tcb_info_path: "/test/layer1/automata-attestation/assets/0923/tcbInfo_00606A000000.json"
+    v3_quote_bytes: 0x0000010000000000000000000000000000000000000000000000000000000000
+  risc0_params:
+    block_proving_image_id: 0x0000010000000000000000000000000000000000000000000000000000000000
+    aggregation_image_id: 0x0000010000000000000000000000000000000000000000000000000000000000
+  sp1_params:
+    block_proving_program_vkey: 0x0000010000000000000000000000000000000000000000000000000000000000
+    aggregation_program_vkey: 0x0000010000000000000000000000000000000000000000000000000000000000
+
