@@ -11,9 +11,10 @@ MAX_PORTS_PER_CL_NODE = 7
 MAX_PORTS_PER_EL_NODE = 7
 MAX_PORTS_PER_VC_NODE = 3
 MAX_PORTS_PER_REMOTE_SIGNER_NODE = 2
-MAX_PORTS_PER_ADDITIONAL_SERVICE = 2
+MAX_PORTS_PER_ADDITIONAL_SERVICE = 3
 MAX_PORTS_PER_MEV_NODE = 2
 MAX_PORTS_PER_OTHER_NODE = 1
+MAX_PORTS_PER_SURGE_STACK_NODE = 7
 
 
 def new_template_and_data(template, template_data_json):
@@ -261,6 +262,12 @@ def get_public_ports_for_component(
             MAX_PORTS_PER_OTHER_NODE,
             participant_index,
         )
+    elif component == "surge_stack":
+        public_port_range = __get_port_range(
+            port_publisher_params.surge_stack_public_port_start,
+            MAX_PORTS_PER_SURGE_STACK_NODE,
+            participant_index,
+        )
     return [port for port in range(public_port_range[0], public_port_range[1], 1)]
 
 
@@ -352,6 +359,15 @@ def get_other_public_port(
         public_ports = get_port_specs({port_id: public_ports_for_component[port_index]})
     return public_ports
 
+def get_surge_stack_public_ports(
+    port_publisher, port_id, additional_service_index, port_index
+):
+    public_ports = {}
+    if port_publisher.surge_stack_enabled:
+        public_ports_for_component = get_public_ports_for_component(
+            "surge_stack", port_publisher, additional_service_index)
+        public_ports = get_port_specs({port_id: public_ports_for_component[port_index]})
+    return public_ports
 
 def get_cpu_mem_resource_limits(
     min_cpu, max_cpu, min_mem, max_mem, volume_size, network_name, client_type

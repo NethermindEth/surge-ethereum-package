@@ -109,6 +109,8 @@ def launch_blockscout(
         blockscout_params,
         network_params,
         global_node_selectors,
+        port_publisher,
+        additional_service_index,
         blockscout_service,
     )
     plan.add_service(SERVICE_NAME_FRONTEND, config_frontend)
@@ -222,15 +224,24 @@ def get_config_frontend(
     blockscout_params,
     network_params,
     node_selectors,
+    port_publisher,
+    additional_service_index,
     blockscout_service,
 ):
+    public_ports = shared_utils.get_additional_service_standard_public_port(
+        port_publisher,
+        constants.HTTP_PORT_ID,
+        additional_service_index,
+        2,
+    )
+
     return ServiceConfig(
         image=shared_utils.docker_cache_image_calc(
             docker_cache_params,
             blockscout_params.frontend_image,
         ),
         ports=FRONTEND_USED_PORTS,
-        public_ports=FRONTEND_USED_PORTS,
+        public_ports=public_ports,
         env_vars={
             "HOSTNAME": "0.0.0.0",
             "NEXT_PUBLIC_API_PROTOCOL": "http",

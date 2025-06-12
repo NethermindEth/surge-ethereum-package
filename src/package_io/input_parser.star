@@ -600,6 +600,10 @@ def input_parser(plan, input_args):
             other_public_port_start=result["port_publisher"]["other"][
                 "public_port_start"
             ],
+            surge_stack_enabled=result["port_publisher"]["surge_stack"]["enabled"],
+            surge_stack_public_port_start=result["port_publisher"]["surge_stack"][
+                "public_port_start"
+            ],
         ),
         protocol_params=struct(
             image=result["protocol_params"]["image"],
@@ -1452,6 +1456,7 @@ def get_port_publisher_params(parameter_type, input_args=None):
         "additional_services": {"enabled": False, "public_port_start": 36000},
         "mev": {"enabled": False, "public_port_start": 37000},
         "other": {"enabled": False, "public_port_start": 38000},
+        "surge_stack": {"enabled": False, "public_port_start": 39000},
     }
     if parameter_type == "default":
         return port_publisher_parameters

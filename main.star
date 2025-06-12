@@ -741,7 +741,12 @@ def run(plan, args={}):
             plan.print("Successfully deployed surge L1")
         elif (additional_service == "surge_stack" and surge_l1_deployment_result != None):
             plan.print("Launching surge stack")
-            # surge_stack_details = surge_stack.launch_surge_stack(
+            # surge_stack_details = surge_stack.launch_surge_main_stack(
+            #     plan,
+            #     network_id,
+            #     all_el_contexts,
+            #     all_cl_contexts,
+            #     surge_l1_deployment_result,
             # )
 
             # surge_l2.setup(
@@ -751,6 +756,14 @@ def run(plan, args={}):
             #     protocol_params,
             #     surge_l1_deployment_result,
             #     surge_stack_details.rpc_url,
+            # )
+
+            # surge_stack.launch_surge_extra_stack(
+            #     plan,
+            #     network_id,
+            #     all_el_contexts,
+            #     all_cl_contexts,
+            #     surge_l1_deployment_result,
             # )
 
             plan.print("Successfully started surge stack")

@@ -299,6 +299,7 @@ SUBCATEGORY_PARAMS = {
         "additional_services",
         "mev",
         "other",
+        "surge_stack",
     ],
     "protocol_params": [
         "image",

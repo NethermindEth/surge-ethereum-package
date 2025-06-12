@@ -126,10 +126,10 @@ network_params:
 
 additional_services:
   - tx_fuzz
+  - blockscout
+  # - blobscan
   - surge
   - surge_stack
-  # - blockscout
-  # - blobscan
 dora_params:
   image: ""
 tx_fuzz_params:
@@ -234,6 +234,9 @@ port_publisher:
   mev:
     enabled: false
     public_port_start: 37000
+  surge_stack:
+    enabled: true
+    public_port_start: 38000
 protocol_params:
   image: nethermind.jfrog.io/modular-oci-local-dev/taiko-protocol:sha-312a3cc
   log_level: "-vv"
