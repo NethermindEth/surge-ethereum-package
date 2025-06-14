@@ -242,6 +242,14 @@ def get_config_frontend(
         2,
     )
 
+    # Get blockscout backend api port
+    api_public_ports = shared_utils.get_additional_service_standard_public_port(
+        port_publisher,
+        constants.HTTP_PORT_ID,
+        additional_service_index,
+        1,
+    )
+
     return ServiceConfig(
         image=shared_utils.docker_cache_image_calc(
             docker_cache_params,
@@ -256,10 +264,10 @@ def get_config_frontend(
             "NEXT_PUBLIC_NETWORK_NAME": "Kurtosis",
             "NEXT_PUBLIC_NETWORK_ID": network_params.network_id,
             "NEXT_PUBLIC_NETWORK_RPC_URL": el_client_rpc_url,
-            # "NEXT_PUBLIC_API_HOST": blockscout_service.ip_address
-            # + ":"
-            # + str(blockscout_service.ports["http"].number),
-            "NEXT_PUBLIC_API_HOST": "localhost:36004",
+            "NEXT_PUBLIC_API_HOST": blockscout_service.ip_address + ":" + str(blockscout_service.ports["http"].number)
+            if api_public_ports == {}
+            # If public port is found, use the localhost
+            else "localhost:{0}".format(api_public_ports[constants.HTTP_PORT_ID].number),
             "NEXT_PUBLIC_AD_BANNER_PROVIDER": "none",
             "NEXT_PUBLIC_AD_TEXT_PROVIDER": "none",
             "NEXT_PUBLIC_IS_TESTNET": "true",
