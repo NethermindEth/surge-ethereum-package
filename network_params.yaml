@@ -4,7 +4,10 @@ participants:
     el_image: nethermind/nethermind:latest
     el_log_level: ""
     el_extra_env_vars: {}
-    el_extra_labels: {}
+    el_extra_labels: {
+      "logs_enabled": "true",
+      "custom_network": "devnet",
+    }
     el_extra_params: []
     el_tolerations: []
     el_volume_size: 0
@@ -17,7 +20,10 @@ participants:
     cl_image: sigp/lighthouse:latest-unstable
     cl_log_level: ""
     cl_extra_env_vars: {}
-    cl_extra_labels: {}
+    cl_extra_labels: {
+      "logs_enabled": "true",
+      "custom_network": "devnet",
+    }
     cl_extra_params: []
     cl_tolerations: []
     cl_volume_size: 0
@@ -32,7 +38,10 @@ participants:
     vc_image: sigp/lighthouse:latest-unstable
     vc_log_level: ""
     vc_extra_env_vars: {}
-    vc_extra_labels: {}
+    vc_extra_labels: {
+      "logs_enabled": "true",
+      "custom_network": "devnet",
+    }
     vc_extra_params: []
     vc_tolerations: []
     vc_min_cpu: 0
@@ -238,7 +247,7 @@ port_publisher:
     enabled: true
     public_port_start: 38000
 protocol_params:
-  image: nethermind.jfrog.io/modular-oci-local-dev/taiko-protocol:sha-312a3cc
+  image: nethermind.jfrog.io/modular-oci-local-dev/taiko-protocol:sha-384d444
   log_level: "-vv"
   block_gas_limit: "200000000"
   owner_params:
@@ -260,10 +269,11 @@ protocol_params:
     fallback_preconf: 0x7633740000000000000000000000000000000001
 prover_params:
   sgx_params:
+    fmspc: "00906ED50000"
     mr_enclave: 0x0000010000000000000000000000000000000000000000000000000000000000
     mr_signer: 0x0000010000000000000000000000000000000000000000000000000000000000
-    qeid_path: "/test/layer1/automata-attestation/assets/0923/identity.json"
-    tcb_info_path: "/test/layer1/automata-attestation/assets/0923/tcbInfo_00606A000000.json"
+    qeid_path: "/test/sgx-assets/qe_identity.json"
+    tcb_info_path: "/test/sgx-assets/tcb_info.json"
     v3_quote_bytes: 0x0000010000000000000000000000000000000000000000000000000000000000
   risc0_params:
     block_proving_image_id: 0x0000010000000000000000000000000000000000000000000000000000000000

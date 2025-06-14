@@ -624,6 +624,7 @@ def input_parser(plan, input_args):
             preconf_fallback_preconf=result["protocol_params"]["preconf_params"]["fallback_preconf"],
         ),
         prover_params=struct(
+            fmspc=result["prover_params"]["sgx_params"]["fmspc"],
             mr_enclave=result["prover_params"]["sgx_params"]["mr_enclave"],
             mr_signer=result["prover_params"]["sgx_params"]["mr_signer"],
             qeid_path=result["prover_params"]["sgx_params"]["qeid_path"],

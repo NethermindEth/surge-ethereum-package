@@ -19,6 +19,11 @@ BLOCKSCOUT_VERIF_MAX_CPU = 1000
 BLOCKSCOUT_VERIF_MIN_MEMORY = 10
 BLOCKSCOUT_VERIF_MAX_MEMORY = 1024
 
+BLOCKSCOUT_LABELS = {
+    "logs_enabled": "true",
+    "custom_network": "devnet",
+}
+
 USED_PORTS = {
     constants.HTTP_PORT_ID: shared_utils.new_port_spec(
         HTTP_PORT_NUMBER,
@@ -147,6 +152,7 @@ def get_config_verif(
         max_cpu=BLOCKSCOUT_VERIF_MAX_CPU,
         min_memory=BLOCKSCOUT_VERIF_MIN_MEMORY,
         max_memory=BLOCKSCOUT_VERIF_MAX_MEMORY,
+        labels=BLOCKSCOUT_LABELS,
         node_selectors=node_selectors,
     )
 
@@ -213,6 +219,7 @@ def get_config_backend(
         max_cpu=BLOCKSCOUT_MAX_CPU,
         min_memory=BLOCKSCOUT_MIN_MEMORY,
         max_memory=BLOCKSCOUT_MAX_MEMORY,
+        labels=BLOCKSCOUT_LABELS,
         node_selectors=node_selectors,
     )
 
@@ -249,9 +256,10 @@ def get_config_frontend(
             "NEXT_PUBLIC_NETWORK_NAME": "Kurtosis",
             "NEXT_PUBLIC_NETWORK_ID": network_params.network_id,
             "NEXT_PUBLIC_NETWORK_RPC_URL": el_client_rpc_url,
-            "NEXT_PUBLIC_API_HOST": blockscout_service.ip_address
-            + ":"
-            + str(blockscout_service.ports["http"].number),
+            # "NEXT_PUBLIC_API_HOST": blockscout_service.ip_address
+            # + ":"
+            # + str(blockscout_service.ports["http"].number),
+            "NEXT_PUBLIC_API_HOST": "localhost:36004",
             "NEXT_PUBLIC_AD_BANNER_PROVIDER": "none",
             "NEXT_PUBLIC_AD_TEXT_PROVIDER": "none",
             "NEXT_PUBLIC_IS_TESTNET": "true",
@@ -263,12 +271,13 @@ def get_config_frontend(
             "NEXT_PUBLIC_APP_PROTOCOL": "http",
             "NEXT_PUBLIC_APP_HOST": "127.0.0.1",
             "NEXT_PUBLIC_APP_PORT": str(HTTP_PORT_NUMBER_FRONTEND),
-            "NEXT_PUBLIC_USE_NEXT_JS_PROXY": "true",
+            "NEXT_PUBLIC_USE_NEXT_JS_PROXY": "false",
             "PORT": str(HTTP_PORT_NUMBER_FRONTEND),
         },
         min_cpu=BLOCKSCOUT_MIN_CPU,
         max_cpu=BLOCKSCOUT_MAX_CPU,
         min_memory=BLOCKSCOUT_MIN_MEMORY,
         max_memory=BLOCKSCOUT_MAX_MEMORY,
+        labels=BLOCKSCOUT_LABELS,
         node_selectors=node_selectors,
     )

@@ -5,6 +5,12 @@ def deploy(
     protocol_params,
     prover_params,
 ):
+    # TODO: Retrieve tcb info and qe identity files and save them in a files artifact
+    retrieve_and_save_sgx_files(
+        plan,
+        prover_params,
+    )
+
     # Run simulation of deploy surge L1 first
     simulation_result = deploy_surge_l1_simulation(
         plan,
@@ -25,6 +31,29 @@ def deploy(
 
     return simulation_result
 
+def retrieve_and_save_sgx_files(
+    plan,
+    prover_params,
+):
+    tcb_link = "https://api.trustedservices.intel.com/sgx/certification/v3/tcb?fmspc={0}".format(prover_params.fmspc)
+    qe_identity_link = "https://api.trustedservices.intel.com/sgx/certification/v3/qe/identity"
+
+    plan.run_sh(
+        run = "mkdir -p /sgx-assets && curl {0} -o /sgx-assets/tcb_info.json && curl {1} -o /sgx-assets/qe_identity.json".format(tcb_link, qe_identity_link),
+        name = "retrieve-sgx-files",
+        image = "badouralix/curl-jq",
+        store = [
+            StoreSpec(
+                src = "/sgx-assets",
+                name = "sgx_files",
+            ),
+        ],
+        wait = "180s",
+        description = "Retrieve TCB info and QE identity files",
+    )
+
+    pass
+
 def deploy_surge_l1_simulation(
     plan,
     prefunded_accounts,
@@ -42,6 +71,8 @@ def deploy_surge_l1_simulation(
         broadcast = "false",
     )
 
+    plan.print("owner: {0}".format(prefunded_accounts[10]))
+    
     # Simulate surge L1 deployment
     plan.run_sh(
         run = "/app/script/layer1/surge/deploy_surge_l1.sh",
@@ -125,6 +156,9 @@ def deploy_surge_l1(
         name = "deploy-surge-l1",
         image = protocol_params.image,
         env_vars = env_vars,
+        files = {
+            "/app/test/sgx-assets": "sgx_files",
+        },
         wait = None,
         description = "Deploy surge L1",
     )
