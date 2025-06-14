@@ -247,7 +247,7 @@ port_publisher:
     enabled: true
     public_port_start: 38000
 protocol_params:
-  image: nethermind.jfrog.io/modular-oci-local-dev/taiko-protocol:sha-384d444
+  image: nethermind.jfrog.io/modular-oci-local-dev/taiko-protocol:sha-1df48ba
   log_level: "-vv"
   block_gas_limit: "200000000"
   owner_params:

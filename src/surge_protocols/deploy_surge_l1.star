@@ -5,7 +5,7 @@ def deploy(
     protocol_params,
     prover_params,
 ):
-    # TODO: Retrieve tcb info and qe identity files and save them in a files artifact
+    # Retrieve tcb info and qe identity files and save them in a files artifact
     retrieve_and_save_sgx_files(
         plan,
         prover_params,
@@ -70,42 +70,33 @@ def deploy_surge_l1_simulation(
         verifier_setup = "false",
         broadcast = "false",
     )
-
-    plan.print("owner: {0}".format(prefunded_accounts[10]))
     
-    # Simulate surge L1 deployment
-    plan.run_sh(
-        run = "/app/script/layer1/surge/deploy_surge_l1.sh",
-        name = "deploy-surge-l1-simulation",
-        image = protocol_params.image,
-        env_vars = env_vars,
-        store = [
-            StoreSpec(
-                src = "/app/deployments/deploy_l1.json",
-                name = "simulation_result",
-            )
-        ],
-        wait = None,
-        description = "Simulate surge L1 deployment",
+    # Set simulation command
+    cmd = [
+        "/app/script/layer1/surge/deploy_surge_l1.sh && sleep 600",
+    ]
+
+    # Get the service config for the simulation
+    service_config = get_service_config(
+        plan,
+        protocol_params,
+        env_vars,
+        cmd,
+        need_ready_conditions = True,
     )
 
-    # Create a service to get the result of the simulation
+    # Simulate surge L1 deployment
     plan.add_service(
-        name = "deploy-surge-l1-result",
-        config = ServiceConfig(
-            image = "badouralix/curl-jq",
-            files = {
-                "/result": "simulation_result",
-            },
-        ),
-        description = "Start to extract surge L1 deployment result",
+        name = "deploy-surge-l1-simulation",
+        config = service_config,
+        description = "Simulate surge L1 deployment",
     )
 
     # Extract the result of the simulation
     result = plan.exec(
-        service_name = "deploy-surge-l1-result",
+        service_name = "deploy-surge-l1-simulation",
         recipe = ExecRecipe(
-            command = ["/bin/sh", "-c", "cat /result/deploy_l1.json"],
+            command = ["/bin/sh", "-c", "cat /app/deployments/deploy_l1.json"],
             extract = {
                 "automata_dcap_attestation": "fromjson | .automata_dcap_attestation",
                 "bridge": "fromjson | .bridge",
@@ -150,16 +141,24 @@ def deploy_surge_l1(
         broadcast = "true",
     )
 
+    # Set deployment command
+    cmd = [
+        "sleep infinity && echo 'Waiting for surge L1 deployment to be executed once provers build info is provided'",
+    ]
+
+    # Get the service config for the deployment
+    service_config = get_service_config(
+        plan,
+        protocol_params,
+        env_vars,
+        cmd,
+        need_ready_conditions = False,
+    )
+
     # Actually deploy surge L1
-    plan.run_sh(
-        run = "/app/script/layer1/surge/deploy_surge_l1.sh",
+    plan.add_service(
         name = "deploy-surge-l1",
-        image = protocol_params.image,
-        env_vars = env_vars,
-        files = {
-            "/app/test/sgx-assets": "sgx_files",
-        },
-        wait = None,
+        config = service_config,
         description = "Deploy surge L1",
     )
 
@@ -214,3 +213,59 @@ def get_env_vars(
     }
 
     return env_vars
+
+def get_service_config(
+    plan,
+    protocol_params,
+    env_vars,
+    cmd,
+    need_ready_conditions,
+):
+    # Mount sgx files
+    files = {
+        "/app/test/sgx-assets": "sgx_files",
+    }
+
+    # Set entrypoint
+    entrypoint = [
+        "/bin/sh",
+        "-c",
+    ]
+
+    # Set ready conditions that checks if the deployment result file exists
+    ready_conditions = ReadyCondition(
+        recipe = ExecRecipe(
+            command = ["test", "-f", "/app/deployments/deploy_l1.json"]
+        ),
+        field = "code",
+        assertion = "==",
+        target_value = 0,
+        interval = "10s",
+        timeout = "120s",
+    )
+
+    # Set labels for monitoring
+    labels = {
+        "logs_enabled": "true",
+        "custom_network": "devnet",
+    }
+
+    # Return the service config with ready conditions if needed
+    if need_ready_conditions:
+        return ServiceConfig(
+            image = protocol_params.image,
+            files = files,
+            entrypoint = entrypoint,
+            cmd = cmd,
+            env_vars = env_vars,
+            ready_conditions = ready_conditions,
+            labels = labels,
+        )
+    else:
+        return ServiceConfig(
+            image = protocol_params.image,
+            files = files,
+            entrypoint = entrypoint,
+            cmd = cmd,
+            env_vars = env_vars,
+        )
