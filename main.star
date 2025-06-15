@@ -57,6 +57,7 @@ get_prefunded_accounts = import_module(
 )
 spamoor = import_module("./src/spamoor/spamoor.star")
 surge_l1 = import_module("./src/surge_protocols/deploy_surge_l1.star")
+deposit_bond = import_module("./src/surge_protocols/deposit_bond.star")
 surge_l2 = import_module("./src/surge_protocols/setup_surge_l2.star")
 
 GRAFANA_USER = "admin"
@@ -730,12 +731,22 @@ def run(plan, args={}):
         elif additional_service == "surge":
             plan.print("Launching surge")
 
+            # Deploy surge L1
             surge_l1_deployment_result = surge_l1.deploy(
                 plan,
                 prefunded_accounts,
                 fuzz_target,
                 protocol_params,
                 prover_params,
+            )
+
+            # Deposit bond for prover and proposer key
+            deposit_bond.deposit_bond(
+                plan,
+                prefunded_accounts,
+                fuzz_target,
+                protocol_params,
+                surge_l1_deployment_result,
             )
 
             plan.print("Successfully deployed surge L1")

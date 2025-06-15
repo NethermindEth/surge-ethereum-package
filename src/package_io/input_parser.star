@@ -622,6 +622,7 @@ def input_parser(plan, input_args):
             preconf_inclusion_window=result["protocol_params"]["preconf_params"]["inclusion_window"],
             preconf_inclusion_fee_in_gwei=result["protocol_params"]["preconf_params"]["inclusion_fee_in_gwei"],
             preconf_fallback_preconf=result["protocol_params"]["preconf_params"]["fallback_preconf"],
+            bond_eth_amount=result["protocol_params"]["bond_params"]["eth_amount"],
         ),
         prover_params=struct(
             fmspc=result["prover_params"]["sgx_params"]["fmspc"],

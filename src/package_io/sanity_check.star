@@ -310,6 +310,7 @@ SUBCATEGORY_PARAMS = {
         "l2_params",
         "liveness_params",
         "preconf_params",
+        "bond_params",
     ],
     "prover_params": [
         "sgx_params",

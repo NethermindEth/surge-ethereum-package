@@ -267,6 +267,8 @@ protocol_params:
     inclusion_window: "24"
     inclusion_fee_in_gwei: "100"
     fallback_preconf: 0x7633740000000000000000000000000000000001
+  bond_params:
+    eth_amount: "10"
 prover_params:
   sgx_params:
     fmspc: "00906ED50000"

@@ -1,3 +1,7 @@
 #!/bin/bash
 
-kurtosis run --enclave surge-devnet . --args-file network_params.yaml --production
+kurtosis service start surge-devnet deposit-bond
+
+sleep 30
+
+kurtosis service stop surge-devnet deposit-bond

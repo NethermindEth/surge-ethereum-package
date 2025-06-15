@@ -98,6 +98,7 @@ def deploy_surge_l1_simulation(
         recipe = ExecRecipe(
             command = ["/bin/sh", "-c", "cat /app/deployments/deploy_l1.json"],
             extract = {
+                # Contract addresses
                 "automata_dcap_attestation": "fromjson | .automata_dcap_attestation",
                 "bridge": "fromjson | .bridge",
                 "erc1155_vault": "fromjson | .erc1155_vault",
@@ -124,7 +125,27 @@ def deploy_surge_l1_simulation(
 
     plan.print("result: {0}".format(result["output"]))
 
-    return result["output"]
+    return struct(
+        # Contract addresses as object
+        automata_dcap_attestation = result["extract.automata_dcap_attestation"],
+        bridge = result["extract.bridge"],
+        erc1155_vault = result["extract.erc1155_vault"],
+        erc20_vault = result["extract.erc20_vault"],
+        erc721_vault = result["extract.erc721_vault"],
+        forced_inclusion_store = result["extract.forced_inclusion_store"],
+        pem_cert_chain_lib = result["extract.pem_cert_chain_lib"],
+        preconf_router = result["extract.preconf_router"],
+        preconf_whitelist = result["extract.preconf_whitelist"],
+        proof_verifier = result["extract.proof_verifier"],
+        risc0_reth_verifier = result["extract.risc0_reth_verifier"],
+        sgx_reth_verifier = result["extract.sgx_reth_verifier"],
+        sig_verify_lib = result["extract.sig_verify_lib"],
+        signal_service = result["extract.signal_service"],
+        sp1_reth_verifier = result["extract.sp1_reth_verifier"],
+        surge_timelock_controller = result["extract.surge_timelock_controller"],
+        taiko = result["extract.taiko"],
+        taiko_wrapper = result["extract.taiko_wrapper"],
+    )
 
 def deploy_surge_l1(
     plan,
