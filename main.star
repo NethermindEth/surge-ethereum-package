@@ -56,9 +56,12 @@ get_prefunded_accounts = import_module(
     "./src/prefunded_accounts/get_prefunded_accounts.star"
 )
 spamoor = import_module("./src/spamoor/spamoor.star")
+
+# SURGE DEVNET
 surge_l1 = import_module("./src/surge_protocols/deploy_surge_l1.star")
 deposit_bond = import_module("./src/surge_protocols/deposit_bond.star")
 surge_l2 = import_module("./src/surge_protocols/setup_surge_l2.star")
+surge_stack = import_module("./src/surge_stack/surge_stack_launcher.star")
 
 GRAFANA_USER = "admin"
 GRAFANA_PASSWORD = "admin"
@@ -752,13 +755,14 @@ def run(plan, args={}):
             plan.print("Successfully deployed surge L1")
         elif (additional_service == "surge_stack" and surge_l1_deployment_result != None):
             plan.print("Launching surge stack")
-            # surge_stack_details = surge_stack.launch_surge_main_stack(
-            #     plan,
-            #     network_id,
-            #     all_el_contexts,
-            #     all_cl_contexts,
-            #     surge_l1_deployment_result,
-            # )
+
+            surge_stack_details = surge_stack.launch_surge_main_stack(
+                plan,
+                network_id,
+                all_el_contexts,
+                all_cl_contexts,
+                surge_l1_deployment_result,
+            )
 
             # surge_l2.setup(
             #     plan,
