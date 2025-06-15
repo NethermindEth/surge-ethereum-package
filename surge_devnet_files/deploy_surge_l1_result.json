@@ -1,0 +1,21 @@
+{
+  "automata_dcap_attestation": "0x35F135f2b53c4a934030BBCFAd01dadE7C82E576",
+  "bridge": "0x29bc1074380052dCa37536464fB490C79BcB90F0",
+  "erc1155_vault": "0xBD09f2eAa5ADDb461A01C35f43dB97c9108BCF64",
+  "erc20_vault": "0xC935D1c64591Aa954F34eB49Ea6175D06A8F21Eb",
+  "erc721_vault": "0x01ff4bbC5b4c0E202D285CD3474ff75111C689C4",
+  "forced_inclusion_store": "0x22519d2eDDFa697942C3C7E310F105B5b1C86518",
+  "pem_cert_chain_lib": "0x355EB3b7F0B82aE0ec56Afd3003a7091219c1C21",
+  "preconf_router": "0x7Fcf08e92634c082967d960e3e0270BCaFcF86ef",
+  "preconf_whitelist": "0x2eb27A5Be6CCE84a69d09503Aa5c4d17C4F2C5f6",
+  "proof_verifier": "0xC3c933d714FbD79e1D6cA89AA1126FC52a64873b",
+  "risc0_reth_verifier": "0x7A2Ef16CDB862898D8667094133C2D02d9A9aa9A",
+  "sgx_reth_verifier": "0x1eEffA028fD0df63Aa2dBA8a223DA4D97A6894eE",
+  "shared_resolver": "0x1e6319f31ff9Df5E1657E0Df32750E9FDcd37A3c",
+  "sig_verify_lib": "0x9bf88b387Fe94c971756545532731A661031CB97",
+  "signal_service": "0xe9711F58D4eA34c73D9892a59469ba2eff675E9C",
+  "sp1_reth_verifier": "0x45a2d021E13dBD3f638BFC4c9E829942dEe0C914",
+  "surge_timelock_controller": "0x8f892206e8411CfF3fDbafE965966D3a473f11BD",
+  "taiko": "0x93AaD1588d6125ca2383efbB0AF3EBc57E266f58",
+  "taiko_wrapper": "0xe5bbc9392adCc02AF413714f5Fbd61402dA0bB47"
+}
