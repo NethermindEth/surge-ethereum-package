@@ -1,6 +1,11 @@
 # TODO: Uncomment these once L2 stack is ready
 # nethermind_launcher = import_module("./main/nethermind_launcher.star")
 # taiko_client_launcher = import_module("./main/taiko_client_launcher.star")
+# blockscout_launcher = import_module("./extra/blockscout_launcher.star")
+# relayer_launcher = import_module("./extra/relayer_launcher.star")
+# bridge_launcher = import_module("./extra/bridge_launcher.star")
+# safe_launcher = import_module("./extra/safe_infrastructure/safe_launcher.star")
+
 constants = import_module("../package_io/constants.star")
 surge_devnet_files = import_module("../surge_devnet_files/surge_devnet_files.star")
 
@@ -52,10 +57,29 @@ def launch_surge_main_stack(
     # )
 
     # TODO: Block Explorer
+    # block_explorer_context = blockscout_launcher.launch(
+    #     plan,
+    # )
 
-    # TODO: Taiko Proposer
+    # TODO: Taiko Proposers
+    # taiko_proposer_context = taiko_client_launcher.launch(
+    #     plan,
+    #     all_el_contexts,
+    #     all_cl_contexts,
+    #     surge_l1_deployment_result,
+    #     nethermind_el_context,
+    #     type = "proposer",
+    # )
 
     # TODO: Taiko Prover Relayer
+    # taiko_prover_relayer_context = taiko_client_launcher.launch(
+    #     plan,
+    #     all_el_contexts,
+    #     all_cl_contexts,
+    #     surge_l1_deployment_result,
+    #     nethermind_el_context,
+    #     type = "prover-relayer",
+    # )
 
     return service
 
@@ -66,9 +90,19 @@ def launch_surge_extra_stack(
     all_cl_contexts,
     surge_l1_deployment_result,
 ):
-    # TODO: Relayer
+    # TODO: Relayers
+    # relayer_context = relayer_launcher.launch(
+    #     plan,
+    # )
 
     # TODO: Brige UI
+    # bridge_context = bridge_launcher.launch(
+    #     plan,
+    # )
 
     # TODO: Safe Infrastructure
+    # safe_context = safe_launcher.launch(
+    #     plan,
+    # )
+
     pass
