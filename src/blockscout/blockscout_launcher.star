@@ -19,6 +19,7 @@ BLOCKSCOUT_VERIF_MAX_CPU = 1000
 BLOCKSCOUT_VERIF_MIN_MEMORY = 10
 BLOCKSCOUT_VERIF_MAX_MEMORY = 1024
 
+# TODO: add a function to shared_utils to generate labels by taking in metrics_enabled, logs_enabled, custom_network and public metrics port
 BLOCKSCOUT_LABELS = {
     "logs_enabled": "true",
     "custom_network": "devnet",
@@ -209,8 +210,8 @@ def get_config_backend(
             "MICROSERVICE_SC_VERIFIER_TYPE": "sc_verifier",
             "INDEXER_DISABLE_PENDING_TRANSACTIONS_FETCHER": "true",
             "ECTO_USE_SSL": "false",
-            "NETWORK": "Kurtosis",
-            "SUBNETWORK": "Kurtosis",
+            "NETWORK": "Surge Devnet",
+            "SUBNETWORK": "Surge Devnet",
             "API_V2_ENABLED": "true",
             "PORT": "{}".format(HTTP_PORT_NUMBER),
             "SECRET_KEY_BASE": "56NtB48ear7+wMSf0IQuWDAAazhpb31qyc7GiyspBP2vh7t5zlCsF5QDv76chXeN",
@@ -261,7 +262,7 @@ def get_config_frontend(
             "HOSTNAME": "0.0.0.0",
             "NEXT_PUBLIC_API_PROTOCOL": "http",
             "NEXT_PUBLIC_API_WEBSOCKET_PROTOCOL": "ws",
-            "NEXT_PUBLIC_NETWORK_NAME": "Kurtosis",
+            "NEXT_PUBLIC_NETWORK_NAME": "Surge Devnet",
             "NEXT_PUBLIC_NETWORK_ID": network_params.network_id,
             "NEXT_PUBLIC_NETWORK_RPC_URL": el_client_rpc_url,
             "NEXT_PUBLIC_API_HOST": blockscout_service.ip_address + ":" + str(blockscout_service.ports["http"].number)
@@ -274,7 +275,7 @@ def get_config_frontend(
             "NEXT_PUBLIC_GAS_TRACKER_ENABLED": "true",
             "NEXT_PUBLIC_HAS_BEACON_CHAIN": "true",
             "NEXT_PUBLIC_NETWORK_VERIFICATION_TYPE": "validation",
-            "NEXT_PUBLIC_NETWORK_ICON": "https://ethpandaops.io/logo.png",
+            "NEXT_PUBLIC_NETWORK_ICON": "https://docs.surge.wtf/img/favicon.ico",
             # "NEXT_PUBLIC_APP_HOST": "0.0.0.0",
             "NEXT_PUBLIC_APP_PROTOCOL": "http",
             "NEXT_PUBLIC_APP_HOST": "127.0.0.1",
