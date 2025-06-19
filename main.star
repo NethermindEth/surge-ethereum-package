@@ -764,14 +764,15 @@ def run(plan, args={}):
                 surge_l1_deployment_result,
             )
 
-            # surge_l2.setup(
-            #     plan,
-            #     network_id,
-            #     prefunded_accounts,
-            #     protocol_params,
-            #     surge_l1_deployment_result,
-            #     surge_stack_details.rpc_url,
-            # )
+            surge_l2.setup(
+                plan,
+                network_id,
+                prefunded_accounts,
+                protocol_params,
+                surge_l1_deployment_result,
+                # surge_stack_details.rpc_url,
+                "http://localhost:8545",
+            )
 
             # surge_stack.launch_surge_extra_stack(
             #     plan,

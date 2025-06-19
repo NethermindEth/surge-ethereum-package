@@ -78,7 +78,6 @@ def deploy_surge_l1_simulation(
 
     # Get the service config for the simulation
     service_config = get_service_config(
-        plan,
         protocol_params,
         env_vars,
         cmd,
@@ -122,8 +121,6 @@ def deploy_surge_l1_simulation(
         ),
         description = "Extract surge L1 deployment result",
     )
-
-    plan.print("result: {0}".format(result["output"]))
 
     return struct(
         # Contract addresses as object
@@ -171,7 +168,6 @@ def deploy_surge_l1(
 
     # Get the service config for the deployment
     service_config = get_service_config(
-        plan,
         protocol_params,
         env_vars,
         cmd,
@@ -238,7 +234,6 @@ def get_env_vars(
     return env_vars
 
 def get_service_config(
-    plan,
     protocol_params,
     env_vars,
     cmd,

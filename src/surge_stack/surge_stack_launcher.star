@@ -23,9 +23,8 @@ def launch_surge_main_stack(
 
     # Upload l2_chainspec.json to the files artifact
     plan.upload_files(
-        src = "github.com/NethermindEth/Surge/spec/surge-hoodi/",
-        # TODO: Replace with Surge repo path once https://github.com/NethermindEth/Surge/pull/116 is merged to main
-        # src = surge_devnet_files.L2_STACK_FILEPATH,
+        # src = "github.com/NethermindEth/Surge/spec/surge-devnet/",
+        src = surge_devnet_files.L2_STACK_FILEPATH,
         name = "surge-devnet-l2-stack-files",
         description = "Upload surge devnet l2 stack files",
     )
@@ -80,8 +79,6 @@ def launch_surge_main_stack(
     #     nethermind_el_context,
     #     type = "prover-relayer",
     # )
-
-    return service
 
 def launch_surge_extra_stack(
     plan,

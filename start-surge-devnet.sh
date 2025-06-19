@@ -1,7 +1,3 @@
 #!/bin/bash
 
-kurtosis service start surge-devnet deposit-bond
-
-sleep 30
-
-kurtosis service stop surge-devnet deposit-bond
+kurtosis service exec surge-devnet setup-surge-l2 "/app/script/layer2/surge/setup_surge_l2.sh && sleep 600"
