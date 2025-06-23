@@ -1,7 +1,17 @@
 #!/bin/bash
 
-# Get the machine's IP address (preferring non-loopback interfaces)
-MACHINE_IP=$(ifconfig | grep -E "inet ([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{print $2}' | head -n1)
+# Get the machine's IP address using ip command (works on Ubuntu)
+MACHINE_IP=$(ip route get 1.1.1.1 | grep -oP 'src \K\S+' | head -n1)
+
+# Fallback to hostname -I if ip route doesn't work
+if [ -z "$MACHINE_IP" ]; then
+    MACHINE_IP=$(hostname -I | awk '{print $1}')
+fi
+
+# Final fallback to parsing ip addr output
+if [ -z "$MACHINE_IP" ]; then
+    MACHINE_IP=$(ip addr show | grep 'inet ' | grep -v '127.0.0.1' | head -n1 | awk '{print $2}' | cut -d'/' -f1)
+fi
 
 if [ -z "$MACHINE_IP" ]; then
     echo "Error: Could not determine machine IP address"
