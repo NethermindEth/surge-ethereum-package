@@ -39,7 +39,8 @@ def retrieve_and_save_sgx_files(
     qe_identity_link = "https://api.trustedservices.intel.com/sgx/certification/v3/qe/identity"
 
     plan.run_sh(
-        run = "mkdir -p /sgx-assets && curl {0} -o /sgx-assets/tcb_info.json && curl {1} -o /sgx-assets/qe_identity.json".format(tcb_link, qe_identity_link),
+        # Convert fmspc to lowercase in tcb info to prevent SGX_INVALID_ATTESTATION error
+        run = "mkdir -p /sgx-assets && curl {0} -o /sgx-assets/temp.json && curl {1} -o /sgx-assets/qe_identity.json && jq '.tcbInfo.fmspc |= ascii_downcase' /sgx-assets/temp.json > /sgx-assets/tcb_info.json".format(tcb_link, qe_identity_link),
         name = "retrieve-sgx-files",
         image = "badouralix/curl-jq",
         store = [
