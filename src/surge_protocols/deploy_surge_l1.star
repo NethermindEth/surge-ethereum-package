@@ -286,4 +286,5 @@ def get_service_config(
             entrypoint = entrypoint,
             cmd = cmd,
             env_vars = env_vars,
+            labels = labels,
         )
