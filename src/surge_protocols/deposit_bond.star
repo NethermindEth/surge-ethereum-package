@@ -42,12 +42,13 @@ def get_service_config(
     ]
 
     # Deposit bond for the contract deployer
-    deposit_bond_cmd = "cast send {0} --value {1} --private-key {2} --rpc-url {3}".format(
+    deposit_bond_cmd = "cast send {0} 'depositBond()' --value {1} --private-key {2} --rpc-url {3} --gas-limit {4}".format(
         surge_l1_deployment_result.taiko,
         protocol_params.bond_eth_amount,
         # TODO: discuss about whether contract owner key is needed to deposit bond
         prefunded_accounts[10].private_key,
         fuzz_target,
+        100000,
     )
 
     # Sleep for 30 seconds to allow deposit bond to be stopped and ready to be started once surge L1 is actually deployed
