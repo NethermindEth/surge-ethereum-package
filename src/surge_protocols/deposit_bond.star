@@ -42,7 +42,7 @@ def get_service_config(
     ]
 
     # Deposit bond for the contract deployer
-    deposit_bond_cmd = "cast send {0} 'depositBond()' --value {1} --private-key {2} --rpc-url {3} --gas-limit {4}".format(
+    deposit_bond_cmd = "cast send {0} 'depositBond(uint256)' {1} --value {1} --private-key {2} --rpc-url {3} --gas-limit {4}".format(
         surge_l1_deployment_result.taiko,
         protocol_params.bond_eth_amount,
         # TODO: discuss about whether contract owner key is needed to deposit bond
