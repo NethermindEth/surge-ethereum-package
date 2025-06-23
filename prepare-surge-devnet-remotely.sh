@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Save the original blockscout launcher
+cp src/blockscout/blockscout_launcher.star src/blockscout/blockscout_launcher.star.bak
+
 # Get the machine's IP address using ip command (works on Ubuntu)
 MACHINE_IP=$(ip route get 1.1.1.1 | grep -oP 'src \K\S+' | head -n1)
 
@@ -35,7 +38,7 @@ echo "Reverting Blockscout to use localhost..."
 # Check if backup exists
 if [ -f "src/blockscout/blockscout_launcher.star.bak" ]; then
     # Restore from backup
-    cp src/blockscout/blockscout_launcher.star.bak src/blockscout/blockscout_launcher.star
+    mv src/blockscout/blockscout_launcher.star.bak src/blockscout/blockscout_launcher.star
     echo "Successfully reverted blockscout launcher to use localhost"
     echo "Restored from backup: src/blockscout/blockscout_launcher.star.bak"
 else
