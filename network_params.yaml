@@ -247,7 +247,7 @@ port_publisher:
     enabled: true
     public_port_start: 38000
 protocol_params:
-  image: nethermind.jfrog.io/modular-oci-local-dev/taiko-protocol:sha-cdbc462
+  image: nethermind.jfrog.io/modular-oci-local-dev/taiko-protocol:sha-5b53217
   log_level: "-vv"
   block_gas_limit: "200000000"
   owner_params:
@@ -268,7 +268,7 @@ protocol_params:
     inclusion_fee_in_gwei: "100"
     fallback_preconf: 0x7633740000000000000000000000000000000001
   bond_params:
-    eth_amount: "10"
+    eth_amount: "1000000000000000000"
 prover_params:
   sgx_params:
     fmspc: "00906ED50000"
