@@ -137,8 +137,8 @@ additional_services:
   - tx_fuzz
   - blockscout
   # - blobscan
-  - surge
-  - surge_stack
+  # - surge
+  # - surge_stack
 dora_params:
   image: ""
 tx_fuzz_params:
@@ -247,7 +247,7 @@ port_publisher:
     enabled: true
     public_port_start: 38000
 protocol_params:
-  image: nethermind.jfrog.io/modular-oci-local-dev/taiko-protocol:sha-056cf10
+  image: nethermind.jfrog.io/modular-oci-local-dev/taiko-protocol:sha-ce01134
   log_level: "-vv"
   block_gas_limit: "200000000"
   owner_params:
@@ -284,71 +284,3 @@ prover_params:
   sp1_params:
     block_proving_program_vkey: "0x00cada2b43b6b66c5cc9061d23624fd53a328462b679fcca908bc3094f1171cf"
     aggregation_program_vkey: "0x000795db478eeeb7bef37247eb93389ba2a4e6c1cbe59a49afc3bd6ac2ad27ba"
-# surge_main_participants:
-# # Nethermind EL
-#   nethermind_params:
-#     nethermind_image: nethermind/nethermind:latest
-#     nethermind_log_level: ""
-#     nethermind_extra_env_vars: {}
-#     nethermind_extra_labels: {
-#       "logs_enabled": "true",
-#       "custom_network": "devnet",
-#     }
-#     nethermind_extra_params: []
-#     # nethermind_tolerations: []
-#     nethermind_volume_size: 0
-#     nethermind_min_cpu: 0
-#     nethermind_max_cpu: 0
-#     nethermind_min_mem: 0
-#     nethermind_max_mem: 0
-# # Taiko client
-#   taiko_client_params:
-#     taiko_client_image: nethermind.jfrog.io/modular-oci-local-dev/taiko-client:sha-26b1c3b
-#     taiko_client_log_level: ""
-#     taiko_client_extra_env_vars: {}
-#     taiko_client_extra_labels: {
-#       "logs_enabled": "true",
-#       "custom_network": "devnet",
-#     }
-#     taiko_client_extra_params: []
-#     # taiko_client_tolerations: []
-#     taiko_client_volume_size: 0
-#     taiko_client_min_cpu: 0
-#     taiko_client_max_cpu: 0
-#     taiko_client_min_mem: 0
-#     taiko_client_max_mem: 0
-#   # TODO: Add node selectors and tolerations for Kubernetes
-#   # node_selectors: {}
-#   # tolerations: []
-#   count: 2
-# surge_extra_participants:
-#   relayer_params:
-#     relayer_image: nethermind.jfrog.io/modular-oci-local-dev/taiko-client:sha-26b1c3b
-#     relayer_log_level: ""
-#     relayer_extra_env_vars: {}
-#     relayer_extra_labels: {
-#       "logs_enabled": "true",
-#       "custom_network": "devnet",
-#     }
-#     relayer_extra_params: []
-#     # relayer_tolerations: []
-#     relayer_volume_size: 0
-#     relayer_min_cpu: 0
-#     relayer_max_cpu: 0
-#     relayer_min_mem: 0
-#     relayer_max_mem: 0
-#   bridge_params:
-#     bridge_image: nethermind.jfrog.io/modular-oci-local-dev/taiko-client:sha-26b1c3b
-#     bridge_log_level: ""
-#     bridge_extra_env_vars: {}
-#     bridge_extra_labels: {
-#       "logs_enabled": "true",
-#       "custom_network": "devnet",
-#     }
-#     bridge_extra_params: []
-#     # bridge_tolerations: []
-#     bridge_volume_size: 0
-#     bridge_min_cpu: 0
-#     bridge_max_cpu: 0
-#     bridge_min_mem: 0
-#     bridge_max_mem: 0
