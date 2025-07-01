@@ -137,8 +137,8 @@ additional_services:
   - tx_fuzz
   - blockscout
   # - blobscan
-  - surge
-  - surge_stack
+  # - surge
+  # - surge_stack
 dora_params:
   image: ""
 tx_fuzz_params:
@@ -247,7 +247,7 @@ port_publisher:
     enabled: true
     public_port_start: 38000
 protocol_params:
-  image: nethermind.jfrog.io/modular-oci-local-dev/taiko-protocol:sha-5b53217
+  image: nethermind.jfrog.io/modular-oci-local-dev/taiko-protocol:sha-ce01134
   log_level: "-vv"
   block_gas_limit: "200000000"
   owner_params:
