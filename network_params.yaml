@@ -247,10 +247,11 @@ port_publisher:
     enabled: true
     public_port_start: 38000
 protocol_params:
-  image: nethermind.jfrog.io/modular-oci-local-dev/taiko-protocol:sha-5b53217
+  image: nethermind.jfrog.io/modular-oci-local-dev/taiko-protocol:sha-056cf10
   log_level: "-vv"
   block_gas_limit: "200000000"
   owner_params:
+    use_timelocked_owner: "false"
     multisig: 0x60997970C51812dc3A010C7d01b50e0d17dc79C8
     multisig_signers: "0x7633740000000000000000000000000000000002,0x7633740000000000000000000000000000000003,0x7633740000000000000000000000000000000004"
     timelock_period: "86400"

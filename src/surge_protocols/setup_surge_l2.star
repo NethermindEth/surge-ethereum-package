@@ -100,7 +100,7 @@ def get_env_vars(
         "L1_ERC20_VAULT": surge_l1_deployment_result.erc20_vault,
         "L1_ERC721_VAULT": surge_l1_deployment_result.erc721_vault,
         "L1_ERC1155_VAULT": surge_l1_deployment_result.erc1155_vault,
-        "L1_TIMELOCK_CONTROLLER": surge_l1_deployment_result.surge_timelock_controller,
+        # "L1_TIMELOCK_CONTROLLER": surge_l1_deployment_result.surge_timelock_controller,
         # Foundry Configuration
         "FOUNDRY_PROFILE": "layer2",
 

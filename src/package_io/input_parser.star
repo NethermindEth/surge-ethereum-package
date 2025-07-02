@@ -609,6 +609,7 @@ def input_parser(plan, input_args):
             image=result["protocol_params"]["image"],
             protocol_log_level=result["protocol_params"]["log_level"],
             protocol_block_gas_limit=result["protocol_params"]["block_gas_limit"],
+            use_timelocked_owner=result["protocol_params"]["owner_params"]["use_timelocked_owner"],
             owner_multisig=result["protocol_params"]["owner_params"]["multisig"],
             owner_multisig_signers=result["protocol_params"]["owner_params"]["multisig_signers"],
             timelock_period=result["protocol_params"]["owner_params"]["timelock_period"],

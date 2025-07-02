@@ -115,9 +115,11 @@ def deploy_surge_l1_simulation(
                 "sig_verify_lib": "fromjson | .sig_verify_lib",
                 "signal_service": "fromjson | .signal_service",
                 "sp1_reth_verifier": "fromjson | .sp1_reth_verifier",
-                "surge_timelock_controller": "fromjson | .surge_timelock_controller",
+                # "surge_timelock_controller": "fromjson | .surge_timelock_controller",
                 "taiko": "fromjson | .taiko",
                 "taiko_wrapper": "fromjson | .taiko_wrapper",
+                "risc0_groth16_verifier": "fromjson | .risc0_groth16_verifier",
+                "succinct_verifier": "fromjson | .succinct_verifier",
             }
         ),
         description = "Extract surge L1 deployment result",
@@ -140,9 +142,11 @@ def deploy_surge_l1_simulation(
         sig_verify_lib = result["extract.sig_verify_lib"],
         signal_service = result["extract.signal_service"],
         sp1_reth_verifier = result["extract.sp1_reth_verifier"],
-        surge_timelock_controller = result["extract.surge_timelock_controller"],
+        # surge_timelock_controller = result["extract.surge_timelock_controller"],
         taiko = result["extract.taiko"],
         taiko_wrapper = result["extract.taiko_wrapper"],
+        risc0_groth16_verifier = result["extract.risc0_groth16_verifier"],
+        succinct_verifier = result["extract.succinct_verifier"],
     )
 
 def deploy_surge_l1(
@@ -199,6 +203,7 @@ def get_env_vars(
         "LOG_LEVEL": protocol_params.protocol_log_level,
         "BLOCK_GAS_LIMIT": protocol_params.protocol_block_gas_limit,
         # Owner and Executor Configuration
+        "USE_TIMELOCKED_OWNER": protocol_params.use_timelocked_owner,
         "OWNER_MULTISIG": protocol_params.owner_multisig,
         "OWNER_MULTISIG_SIGNERS": protocol_params.owner_multisig_signers,
         "TIMELOCK_PERIOD": protocol_params.timelock_period,
