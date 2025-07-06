@@ -1,5 +1,9 @@
 #!/bin/bash
 
+set -e
+
+echo "Preparing surge devnet remotely"
+
 # Save the original blockscout launcher
 cp src/blockscout/blockscout_launcher.star src/blockscout/blockscout_launcher.star.bak
 
@@ -50,3 +54,5 @@ else
     
     echo "Successfully reverted blockscout launcher to use localhost"
 fi
+
+echo "Successfully prepared surge devnet remotely"
