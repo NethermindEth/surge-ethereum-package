@@ -150,13 +150,14 @@ spamoor_params:
   min_mem: 20
   max_mem: 300
   spammers:
-    - scenario: eoatx  # The spamoor scenario to use (see https://github.com/ethpandaops/spamoor)
-      name: "Optional name for this example spammer"
+    - scenario: eoatx
+      name: "Standard ETH transfers"
       config:
-        throughput: 100  # 10 tx per block
+        throughput: 10
     - scenario: erctx
+      name: "Deploy ERC20 tokens and perform transfers"
       config:
-        throughput: 100  # 10 tx per block
+        throughput: 10
   extra_args: []
 prometheus_params:
   storage_tsdb_retention_time: "1d"
