@@ -134,7 +134,8 @@ network_params:
   min_epochs_for_data_column_sidecars_requests: 4096
 
 additional_services:
-  - tx_fuzz
+  # - tx_fuzz
+  - spamoor
   - blockscout
   # - blobscan
   # - surge
@@ -148,6 +149,14 @@ spamoor_params:
   max_cpu: 1000
   min_mem: 20
   max_mem: 300
+  spammers:
+    - scenario: eoatx  # The spamoor scenario to use (see https://github.com/ethpandaops/spamoor)
+      name: "Optional name for this example spammer"
+      config:
+        throughput: 100  # 10 tx per block
+    - scenario: erctx
+      config:
+        throughput: 100  # 10 tx per block
   extra_args: []
 prometheus_params:
   storage_tsdb_retention_time: "1d"
