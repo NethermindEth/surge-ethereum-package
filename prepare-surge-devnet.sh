@@ -1,15 +1,20 @@
 #!/bin/bash
 set -e
 
-# Select remote or local
-echo "Select remote or local (0 for local, 1 for remote) [default: local]: "
+echo
+echo "╔══════════════════════════════════════════════════════════════╗"
+echo "  ⚠️ Select remote or local:                                    "
+echo "║══════════════════════════════════════════════════════════════║"
+echo "║  0 for local                                                 ║"
+echo "║  1 for remote                                                ║"
+echo "║ [default: local]                                             ║"
+echo "╚══════════════════════════════════════════════════════════════╝"
+echo
 read -r remote_or_local
 
 REMOTE_OR_LOCAL=${remote_or_local:-0}
 
 if [ "$REMOTE_OR_LOCAL" == "1" ]; then
-    echo "Preparing surge devnet remotely..."
-    
     # Save the original blockscout launcher
     cp src/blockscout/blockscout_launcher.star src/blockscout/blockscout_launcher.star.bak
 
@@ -27,46 +32,71 @@ if [ "$REMOTE_OR_LOCAL" == "1" ]; then
     fi
 
     if [ -z "$MACHINE_IP" ]; then
-        echo "Error: Could not determine machine IP address"
+        echo
+        echo "╔══════════════════════════════════════════════════════════════╗"
+        echo "  ❌ Error: Could not determine machine IP address              "
+        echo "╚══════════════════════════════════════════════════════════════╝"
+        echo
         exit 1
     fi
 
-    echo "Setting Blockscout to use machine IP: $MACHINE_IP"
+    echo
+    echo "╔══════════════════════════════════════════════════════════════╗"
+    echo "║ Setting Blockscout to use machine IP: $MACHINE_IP            ║"
+    echo "╚══════════════════════════════════════════════════════════════╝"
+    echo
 
     # Replace localhost with machine IP in blockscout launcher
     sed -i.bak 's/else "localhost:{0}"/else "'$MACHINE_IP':{0}"/g' src/blockscout/blockscout_launcher.star
 
-    echo "Successfully updated blockscout launcher to use machine IP: $MACHINE_IP"
-    echo "Original file backed up as: src/blockscout/blockscout_launcher.star.bak"
+    echo
+    echo "╔══════════════════════════════════════════════════════════════╗"
+    echo "  💾 Original file backed up                                    "
+    echo "║══════════════════════════════════════════════════════════════║"
+    echo "║ src/blockscout/blockscout_launcher.star.bak                  ║"
+    echo "╚══════════════════════════════════════════════════════════════╝"
+    echo
 
     kurtosis run --enclave surge-devnet . --args-file network_params.yaml --production
 
-    echo "Surge Devnet is prepared"
+    echo
+    echo "╔══════════════════════════════════════════════════════════════╗"
+    echo "  ✅ Successfully prepared surge devnet remotely                "
+    echo "╚══════════════════════════════════════════════════════════════╝"
+    echo
 
-    echo "Reverting Blockscout to use localhost..."
+    echo
+    echo "╔══════════════════════════════════════════════════════════════╗"
+    echo "  💡 Reverting blockscout to original state...                  "
+    echo "╚══════════════════════════════════════════════════════════════╝"
+    echo
 
     # Check if backup exists
     if [ -f "src/blockscout/blockscout_launcher.star.bak" ]; then
         # Restore from backup
         mv src/blockscout/blockscout_launcher.star.bak src/blockscout/blockscout_launcher.star
-        echo "Successfully reverted blockscout launcher to use localhost"
-        echo "Restored from backup: src/blockscout/blockscout_launcher.star.bak"
+        echo
+        echo "╔══════════════════════════════════════════════════════════════╗"
+        echo "  ✅ Successfully reverted blockscout to original state         "
+        echo "║══════════════════════════════════════════════════════════════║"
+        echo "║ Restored from: src/blockscout/blockscout_launcher.star.bak   ║"
+        echo "╚══════════════════════════════════════════════════════════════╝"
+        echo
     else
         # Manual replacement back to localhost
-        echo "No backup found, performing manual revert..."
-        
-        # Replace any IP address pattern with localhost
-        sed -i 's/else "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}:{0}"/else "localhost:{0}"/g' src/blockscout/blockscout_launcher.star
-        
-        echo "Successfully reverted blockscout launcher to use localhost"
+        echo
+        echo "╔══════════════════════════════════════════════════════════════╗"
+        echo "  ❌ No backup found, git stash to restore...                   "
+        echo "╚══════════════════════════════════════════════════════════════╝"
+        echo
     fi
-
-    echo "Successfully prepared surge devnet remotely"
 else
-    echo "Preparing surge devnet locally..."
-
     kurtosis run --enclave surge-devnet . --args-file network_params.yaml --production
 
-    echo "Successfully prepared surge devnet"
+    echo
+    echo "╔══════════════════════════════════════════════════════════════╗"
+    echo "  ✅ Successfully prepared surge devnet locally                 "
+    echo "╚══════════════════════════════════════════════════════════════╝"
+    echo
 fi
 
