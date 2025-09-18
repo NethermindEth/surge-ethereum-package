@@ -57,7 +57,7 @@ if [ "$REMOTE_OR_LOCAL" == "1" ]; then
     echo "╚══════════════════════════════════════════════════════════════╝"
     echo
 
-    kurtosis run --enclave surge-devnet . --args-file network_params.yaml --production
+    kurtosis run --enclave surge-devnet . --args-file network_params.yaml --production --image-download always
 
     echo
     echo "╔══════════════════════════════════════════════════════════════╗"
@@ -91,7 +91,7 @@ if [ "$REMOTE_OR_LOCAL" == "1" ]; then
         echo
     fi
 else
-    kurtosis run --enclave surge-devnet . --args-file network_params.yaml --production
+    kurtosis run --enclave surge-devnet . --args-file network_params.yaml --production --image-download always
 
     echo
     echo "╔══════════════════════════════════════════════════════════════╗"
