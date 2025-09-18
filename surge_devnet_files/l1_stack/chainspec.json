@@ -60,13 +60,14 @@
     "eip7251TransitionTimestamp": "0x0",
     "eip7623TransitionTimestamp": "0x0",
     "eip7702TransitionTimestamp": "0x0",
-    "blobSchedule": {
-      "0x0": {
+    "blobSchedule": [
+      {
+        "timestamp": "0x0",
         "target": 6,
         "max": 9,
         "baseFeeUpdateFraction": "0x4c6964"
       }
-    }
+    ]
   },
   "genesis": {
     "seal": {
@@ -77,7 +78,7 @@
     },
     "difficulty": "0x0",
     "author": "0x0000000000000000000000000000000000000000",
-    "timestamp": "0x6849079e",
+    "timestamp": "0x68cb614d",
     "parentHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
     "extraData": "",
     "gasLimit": "0x3938700"
