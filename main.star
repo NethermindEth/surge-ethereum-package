@@ -57,12 +57,6 @@ get_prefunded_accounts = import_module(
 )
 spamoor = import_module("./src/spamoor/spamoor.star")
 
-# SURGE DEVNET
-surge_l1 = import_module("./src/surge_protocols/deploy_surge_l1.star")
-deposit_bond = import_module("./src/surge_protocols/deposit_bond.star")
-surge_l2 = import_module("./src/surge_protocols/setup_surge_l2.star")
-surge_stack = import_module("./src/surge_stack/surge_stack_launcher.star")
-
 GRAFANA_USER = "admin"
 GRAFANA_PASSWORD = "admin"
 GRAFANA_DASHBOARD_PATH_URL = "/d/QdTOwy-nz/eth2-merge-kurtosis-module-dashboard?orgId=1"
@@ -94,8 +88,6 @@ def run(plan, args={}):
     keymanager_enabled = args_with_right_defaults.keymanager_enabled
     apache_port = args_with_right_defaults.apache_port
     docker_cache_params = args_with_right_defaults.docker_cache_params
-    protocol_params = args_with_right_defaults.protocol_params
-    prover_params = args_with_right_defaults.prover_params
 
     prefunded_accounts = genesis_constants.PRE_FUNDED_ACCOUNTS
     if (
@@ -731,58 +723,6 @@ def run(plan, args={}):
                 index,
                 osaka_time,
             )
-        elif additional_service == "surge":
-            plan.print("Launching surge")
-
-            # Deploy surge L1
-            surge_l1_deployment_result = surge_l1.deploy(
-                plan,
-                prefunded_accounts,
-                fuzz_target,
-                protocol_params,
-                prover_params,
-            )
-
-            # Deposit bond for prover and proposer key
-            deposit_bond.deposit_bond(
-                plan,
-                prefunded_accounts,
-                fuzz_target,
-                protocol_params,
-                surge_l1_deployment_result,
-            )
-
-            plan.print("Successfully deployed surge L1")
-        elif (additional_service == "surge_stack" and surge_l1_deployment_result != None):
-            plan.print("Launching surge stack")
-
-            surge_stack_details = surge_stack.launch_surge_main_stack(
-                plan,
-                network_id,
-                all_el_contexts,
-                all_cl_contexts,
-                surge_l1_deployment_result,
-            )
-
-            surge_l2.setup(
-                plan,
-                network_id,
-                prefunded_accounts,
-                protocol_params,
-                surge_l1_deployment_result,
-                # surge_stack_details.rpc_url,
-                "http://localhost:8545",
-            )
-
-            # surge_stack.launch_surge_extra_stack(
-            #     plan,
-            #     network_id,
-            #     all_el_contexts,
-            #     all_cl_contexts,
-            #     surge_l1_deployment_result,
-            # )
-
-            plan.print("Successfully started surge stack")
         else:
             fail("Invalid additional service %s" % (additional_service))
     if launch_prometheus_grafana:

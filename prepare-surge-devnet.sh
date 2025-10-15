@@ -100,3 +100,45 @@ else
     echo
 fi
 
+check_network_status() {
+    echo
+    echo "╔══════════════════════════════════════════════════════════════╗"
+    echo "  🔍 Checking network status...                               "
+    echo "╚══════════════════════════════════════════════════════════════╝"
+    echo
+    
+    if curl http://localhost:32003 -X POST -H "Content-Type: application/json" --data '{
+      "jsonrpc": "2.0",
+      "id": 0,
+      "method": "eth_syncing",
+      "params": []
+    }' | jq -r '.result == false'; then
+        echo
+        echo "╔══════════════════════════════════════════════════════════════╗"
+        echo "  ✅ Execution Layer is synced                                    "
+        echo "╚══════════════════════════════════════════════════════════════╝"
+        echo
+    else
+        echo
+        echo "╔══════════════════════════════════════════════════════════════╗"
+        echo "  ❌ Execution Layer is not healthy                             "
+        echo "╚══════════════════════════════════════════════════════════════╝"
+        echo
+    fi
+
+    if curl -s http://localhost:33001/lighthouse/syncing | jq -r '.data == "Synced"'; then
+        echo
+        echo "╔══════════════════════════════════════════════════════════════╗"
+        echo "  ✅ Beacon Node is synced                                      "
+        echo "╚══════════════════════════════════════════════════════════════╝"
+        echo
+    else
+        echo
+        echo "╔══════════════════════════════════════════════════════════════╗"
+        echo "  ❌ Beacon Node is not healthy                                 "
+        echo "╚══════════════════════════════════════════════════════════════╝"
+        echo
+    fi
+}
+
+check_network_status
