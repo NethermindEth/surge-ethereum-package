@@ -4,10 +4,7 @@ participants:
     el_image: nethermind/nethermind:latest
     el_log_level: ""
     el_extra_env_vars: {}
-    el_extra_labels: {
-      "logs_enabled": "true",
-      "custom_network": "devnet",
-    }
+    el_extra_labels: {}
     el_extra_params: []
     el_tolerations: []
     el_volume_size: 0
@@ -20,10 +17,7 @@ participants:
     cl_image: sigp/lighthouse:latest-unstable
     cl_log_level: ""
     cl_extra_env_vars: {}
-    cl_extra_labels: {
-      "logs_enabled": "true",
-      "custom_network": "devnet",
-    }
+    cl_extra_labels: {}
     cl_extra_params: []
     cl_tolerations: []
     cl_volume_size: 0
@@ -38,10 +32,7 @@ participants:
     vc_image: sigp/lighthouse:latest-unstable
     vc_log_level: ""
     vc_extra_env_vars: {}
-    vc_extra_labels: {
-      "logs_enabled": "true",
-      "custom_network": "devnet",
-    }
+    vc_extra_labels: {}
     vc_extra_params: []
     vc_tolerations: []
     vc_min_cpu: 0
@@ -132,7 +123,6 @@ network_params:
   withdrawal_address: "0x8943545177806ED17B9F23F0a21ee5948eCaa776"
   validator_balance: 32
   min_epochs_for_data_column_sidecars_requests: 4096
-
 additional_services:
   - spamoor
   - blockscout

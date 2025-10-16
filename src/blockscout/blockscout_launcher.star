@@ -19,12 +19,6 @@ BLOCKSCOUT_VERIF_MAX_CPU = 1000
 BLOCKSCOUT_VERIF_MIN_MEMORY = 10
 BLOCKSCOUT_VERIF_MAX_MEMORY = 1024
 
-# TODO: add a function to shared_utils to generate labels by taking in metrics_enabled, logs_enabled, custom_network and public metrics port
-BLOCKSCOUT_LABELS = {
-    "logs_enabled": "true",
-    "custom_network": "devnet",
-}
-
 USED_PORTS = {
     constants.HTTP_PORT_ID: shared_utils.new_port_spec(
         HTTP_PORT_NUMBER,
@@ -153,7 +147,6 @@ def get_config_verif(
         max_cpu=BLOCKSCOUT_VERIF_MAX_CPU,
         min_memory=BLOCKSCOUT_VERIF_MIN_MEMORY,
         max_memory=BLOCKSCOUT_VERIF_MAX_MEMORY,
-        labels=BLOCKSCOUT_LABELS,
         node_selectors=node_selectors,
     )
 
@@ -220,7 +213,6 @@ def get_config_backend(
         max_cpu=BLOCKSCOUT_MAX_CPU,
         min_memory=BLOCKSCOUT_MIN_MEMORY,
         max_memory=BLOCKSCOUT_MAX_MEMORY,
-        labels=BLOCKSCOUT_LABELS,
         node_selectors=node_selectors,
     )
 
@@ -287,6 +279,5 @@ def get_config_frontend(
         max_cpu=BLOCKSCOUT_MAX_CPU,
         min_memory=BLOCKSCOUT_MIN_MEMORY,
         max_memory=BLOCKSCOUT_MAX_MEMORY,
-        labels=BLOCKSCOUT_LABELS,
         node_selectors=node_selectors,
     )
