@@ -134,6 +134,7 @@ remove_enclave() {
     
     echo
     show_removal_progress $remove_pid "Stopping and removing services..."
+    echo
     
     # Wait for completion and check status
     wait $remove_pid
@@ -158,6 +159,7 @@ cleanup_system() {
     
     echo
     show_removal_progress $cleanup_pid "Cleaning up unused resources..."
+    echo
     
     # Wait for completion and check status
     wait $cleanup_pid

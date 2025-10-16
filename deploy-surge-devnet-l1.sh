@@ -131,10 +131,39 @@ show_progress() {
         printf "\b%s" "${spinner:i++%${#spinner}:1}"
         sleep 0.1
     done
+    echo
     printf "\b\n"
 }
 
-# Updated run_kurtosis function
+# Validate environment
+validate_environment() {
+    log_info "Validating environment..."
+    
+    # Check if enclave already exists
+    if kurtosis enclave ls | grep -q "$ENCLAVE_NAME"; then
+        log_warning "Enclave '$ENCLAVE_NAME' already exists"
+        log_info "Removing existing enclave..."
+        kurtosis enclave rm "$ENCLAVE_NAME" --force >/dev/null 2>&1 || true
+    fi
+    
+    # Check Docker is running
+    if ! docker info >/dev/null 2>&1; then
+        log_error "Docker is not running or not accessible"
+        log_error "Please start Docker and ensure your user has docker permissions"
+        return 1
+    fi
+    
+    # Check network params file exists
+    if [[ ! -f "$NETWORK_PARAMS" ]]; then
+        log_error "Network parameters file not found: $NETWORK_PARAMS"
+        return 1
+    fi
+    
+    log_success "Environment validation passed"
+    return 0
+}
+
+# Run kurtosis with different settings
 run_kurtosis() {
     local environment="$1"
     local mode="$2"
@@ -149,25 +178,61 @@ run_kurtosis() {
     log_info "Starting Surge DevNet L1 ($environment environment) in $mode mode..."
     echo 
     
-    # Run kurtosis in background
+    local exit_status=0
+    local temp_output="/tmp/surge_devnet_l1_output_$$"
+    
+    # Run kurtosis based on mode
     if [[ "$mode" == "debug" ]]; then
-        kurtosis run --enclave "$ENCLAVE_NAME" . --args-file "$NETWORK_PARAMS" --production --image-download always --verbosity brief &
+        # Debug mode: run in foreground, capture output for error detection
+        kurtosis run --enclave "$ENCLAVE_NAME" . --args-file "$NETWORK_PARAMS" --production --image-download always --verbosity brief 2>&1 | tee "$temp_output"
+        exit_status=${PIPESTATUS[0]}
     else
-        kurtosis run --enclave "$ENCLAVE_NAME" . --args-file "$NETWORK_PARAMS" --production --image-download always >/dev/null 2>&1 &
+        # Silent mode: run in background with progress indicator
+        kurtosis run --enclave "$ENCLAVE_NAME" . --args-file "$NETWORK_PARAMS" --production --image-download always >"$temp_output" 2>&1 &
+        local kurtosis_pid=$!
+        show_progress $kurtosis_pid "Initializing Surge DevNet L1..."
+        echo
+        
+        # Wait for completion and check status
+        wait $kurtosis_pid
+        exit_status=$?
     fi
     
-    local kurtosis_pid=$!
-    show_progress $kurtosis_pid "Initializing Surge DevNet L1..."
-    echo
+    # Check for specific error patterns in the output
+    local has_errors=false
+    if [[ -f "$temp_output" ]]; then
+        if grep -q "Error encountered running Starlark code" "$temp_output"; then
+            has_errors=true
+            log_error "Starlark execution failed"
+        fi
+        # TODO: Add more error detection
+    fi
     
-    # Wait for completion and check status
-    wait $kurtosis_pid
-    local exit_status=$?
+    # Clean up temp file (disabled for debugging purposes)
+    # rm -f "$temp_output"
     
-    if [[ $exit_status -eq 0 ]]; then
-        log_success "Surge DevNet L1 started successfully in $environment environment"
+    # Check the actual exit status and error patterns
+    if [[ $exit_status -eq 0 && "$has_errors" == "false" ]]; then
+        # Verify that services actually started
+        if verify_services_started; then
+            log_success "Surge DevNet L1 started successfully in $environment environment"
+            return 0
+        else
+            log_error "Kurtosis completed but services did not start properly"
+            return 1
+        fi
     else
-        log_error "Failed to start Surge DevNet L1, try to run again with debug mode and contact Surge team for help if the problem persists"
+        log_error "Failed to start Surge DevNet L1 (exit code: $exit_status)"
+        if [[ "$mode" == "silence" ]]; then
+            log_error "Run with debug mode for more details: --mode debug"
+        fi
+        log_error "Common issues:"
+        log_error "  • Check if Docker images exist and are accessible"
+        log_error "  • Verify network_params.yaml configuration"
+        log_error "  • Ensure sufficient system resources"
+        log_error "Contact Surge team for help if the problem persists"
+        log_error "The output of the deployment is saved in $temp_output"
+        log_error "Please share the output with the Surge team"
         return 1
     fi
 }
@@ -246,8 +311,6 @@ display_services_information() {
 
 # Main function
 main() {
-    display_services_information
-    
     # Show help if requested
     if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
         show_help
@@ -302,6 +365,11 @@ main() {
         mode_choice=$mode
     fi
 
+    if ! validate_environment; then
+        log_error "Environment validation failed"
+        exit 1
+    fi
+
     case "$env_choice" in
         1|"remote")
             # Remote deployment
@@ -315,11 +383,19 @@ main() {
             fi
             
             configure_remote_blockscout "$machine_ip"
-            run_kurtosis "remote" $mode_choice
+            if ! run_kurtosis "remote" $mode_choice; then
+                log_error "Deployment failed, cleaning up..."
+                kurtosis enclave rm "$ENCLAVE_NAME" --force >/dev/null 2>&1 || true
+                exit 1
+            fi
             ;;
         0|"local"|"")
             # Local deployment
-            run_kurtosis "local" $mode_choice
+            if ! run_kurtosis "local" $mode_choice; then
+                log_error "Deployment failed, cleaning up..."
+                kurtosis enclave rm "$ENCLAVE_NAME" --force >/dev/null 2>&1 || true
+                exit 1
+            fi
             ;;
         *)
             log_error "Invalid choice: $env_choice"
@@ -332,6 +408,8 @@ main() {
     check_network_health
     
     log_success "Surge DevNet L1 preparation complete!"
+
+    display_services_information
 }
 
 # Run main function
