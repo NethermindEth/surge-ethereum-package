@@ -21,19 +21,19 @@ readonly NC='\033[0m' # No Color
 
 # Logging functions
 log_info() {
-    echo -e "${BLUE}[INFO]${NC} $1"
+    echo -e "\n${BLUE}[INFO]${NC} $1"
 }
 
 log_success() {
-    echo -e "${GREEN}[SUCCESS]${NC} $1"
+    echo -e "\n${GREEN}[SUCCESS]${NC} $1"
 }
 
 log_warning() {
-    echo -e "${YELLOW}[WARNING]${NC} $1"
+    echo -e "\n${YELLOW}[WARNING]${NC} $1"
 }
 
 log_error() {
-    echo -e "${RED}[ERROR]${NC} $1" >&2
+    echo -e "\n${RED}[ERROR]${NC} $1" >&2
 }
 
 # Show usage help
@@ -142,8 +142,27 @@ validate_environment() {
     # Check if enclave already exists
     if kurtosis enclave ls | grep -q "$ENCLAVE_NAME"; then
         log_warning "Enclave '$ENCLAVE_NAME' already exists"
-        log_info "Removing existing enclave..."
-        kurtosis enclave rm "$ENCLAVE_NAME" --force >/dev/null 2>&1 || true
+        # Prompt to remove existing enclave for new deployment
+        echo
+        echo "╔══════════════════════════════════════════════════════════════╗"
+        echo "  ⚠️ Redeploy Surge DevNet L1:                                  "
+        echo "║══════════════════════════════════════════════════════════════║"
+        echo "║  0 for no (default)                                          ║"
+        echo "║  1 for yes                                                   ║"
+        echo "╚══════════════════════════════════════════════════════════════╝"
+        echo
+        
+        read -p "Enter choice [0]: " redeploy_choice
+        redeploy_choice=${redeploy_choice:-0}
+        
+        if [[ "$redeploy_choice" == 1 ]]; then
+            log_info "Removing existing enclave..."
+            kurtosis enclave rm "$ENCLAVE_NAME" --force >/dev/null 2>&1 || true
+        else
+            log_info "Keeping existing enclave..."
+            display_services_information
+            exit 0
+        fi
     fi
     
     # Check Docker is running
@@ -174,7 +193,6 @@ run_kurtosis() {
         mode="debug"
     fi
 
-    echo
     log_info "Starting Surge DevNet L1 ($environment environment) in $mode mode..."
     echo 
     
@@ -191,7 +209,6 @@ run_kurtosis() {
         kurtosis run --enclave "$ENCLAVE_NAME" . --args-file "$NETWORK_PARAMS" --production --image-download always >"$temp_output" 2>&1 &
         local kurtosis_pid=$!
         show_progress $kurtosis_pid "Initializing Surge DevNet L1..."
-        echo
         
         # Wait for completion and check status
         wait $kurtosis_pid
@@ -280,7 +297,6 @@ prompt_deployment_mode() {
 
 # Display main services information
 display_services_information() {
-    echo
     log_info "Here are the main services information..."
     echo
     

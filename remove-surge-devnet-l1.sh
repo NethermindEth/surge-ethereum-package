@@ -14,19 +14,19 @@ readonly NC='\033[0m' # No Color
 
 # Logging functions
 log_info() {
-    echo -e "${BLUE}[INFO]${NC} $1"
+    echo -e "\n${BLUE}[INFO]${NC} $1"
 }
 
 log_success() {
-    echo -e "${GREEN}[SUCCESS]${NC} $1"
+    echo -e "\n${GREEN}[SUCCESS]${NC} $1"
 }
 
 log_warning() {
-    echo -e "${YELLOW}[WARNING]${NC} $1"
+    echo -e "\n${YELLOW}[WARNING]${NC} $1"
 }
 
 log_error() {
-    echo -e "${RED}[ERROR]${NC} $1" >&2
+    echo -e "\n${RED}[ERROR]${NC} $1" >&2
 }
 
 # Show usage help
@@ -134,7 +134,6 @@ remove_enclave() {
     
     echo
     show_removal_progress $remove_pid "Stopping and removing services..."
-    echo
     
     # Wait for completion and check status
     wait $remove_pid
@@ -159,7 +158,6 @@ cleanup_system() {
     
     echo
     show_removal_progress $cleanup_pid "Cleaning up unused resources..."
-    echo
     
     # Wait for completion and check status
     wait $cleanup_pid
@@ -176,7 +174,6 @@ cleanup_system() {
 
 # Display removal summary
 display_removal_summary() {
-    echo
     log_info "Removal Summary:"
     echo
     echo "╔══════════════════════════════════════════════════════════════╗"
@@ -228,7 +225,6 @@ main() {
         fi
     fi
     
-    echo
     log_info "Beginning Surge DevNet L1 removal process..."
     
     # Remove the enclave
