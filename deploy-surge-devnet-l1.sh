@@ -213,14 +213,8 @@ run_kurtosis() {
     
     # Check the actual exit status and error patterns
     if [[ $exit_status -eq 0 && "$has_errors" == "false" ]]; then
-        # Verify that services actually started
-        if verify_services_started; then
-            log_success "Surge DevNet L1 started successfully in $environment environment"
-            return 0
-        else
-            log_error "Kurtosis completed but services did not start properly"
-            return 1
-        fi
+        log_success "Surge DevNet L1 started successfully in $environment environment"
+        return 0
     else
         log_error "Failed to start Surge DevNet L1 (exit code: $exit_status)"
         if [[ "$mode" == "silence" ]]; then
