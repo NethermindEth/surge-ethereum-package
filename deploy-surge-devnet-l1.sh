@@ -290,7 +290,7 @@ display_services_information() {
     local el_ws=32004
     local cl_api=33001
     local blockscout_frontend=36005
-    local spamoor_url=34000
+    local spamoor_url=36000
 
     echo "Key Service Endpoints:"
     echo
